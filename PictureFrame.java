@@ -1,4 +1,5 @@
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -10,6 +11,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
 
 // This is the base for the picture frame
 public class PictureFrame extends JFrame {
@@ -49,19 +52,26 @@ public class PictureFrame extends JFrame {
 		setupMenu();
 		Container c = getContentPane();
 		c.setLayout(new BorderLayout());
-		JPanel panSouth = new JPanel();
-		panSouth.setLayout(new FlowLayout());
+		JPanel panCenter = new JPanel();
+		panCenter.setLayout(new BorderLayout());
+		JTextField panCNorth = new JTextField();
+		panCenter.add(panCNorth, BorderLayout.NORTH);
+		JTextArea panCCenter = new JTextArea();
+		panCenter.add(panCCenter, BorderLayout.CENTER);
+		JPanel panCSouth = new JPanel();
+		panCSouth.setLayout(new FlowLayout());
 		JButton btnNext = new JButton("Next");
 		JButton btnPrev = new JButton("Prev");
 		JButton btnSave = new JButton("Save");
-		panSouth.add(btnPrev);
-		panSouth.add(btnSave);
-		panSouth.add(btnNext);
-		c.add(panSouth, BorderLayout.SOUTH);
-		PicturePanel panCenter = new PicturePanel();
+		panCSouth.add(btnPrev);
+		panCSouth.add(btnSave);
+		panCSouth.add(btnNext);
+		panCenter.add(panCSouth, BorderLayout.SOUTH);
 		c.add(panCenter, BorderLayout.CENTER);
-		
-		
+		PicturePanel panNorth = new PicturePanel();
+		// panNorth.setPreferredSize(new Dimension(290, 290));
+		c.add(panNorth, BorderLayout.NORTH);
+
 	}
 	
 	public PictureFrame() {

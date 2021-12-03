@@ -17,6 +17,7 @@ public class PictureDataReader {
 			picture = new PictureData(parts[0], parts[1], parts[2]);
 			pictures.add(picture);
 		}
+		fsc.close();
 		return pictures;
 		} catch (Exception ex) {
 			System.out.println("Something went wrong reading the file.");
