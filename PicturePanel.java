@@ -2,7 +2,6 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,7 +12,7 @@ import java.io.File;
 public class PicturePanel extends JPanel implements MouseListener, MouseMotionListener {
 	private String coords;
 	private int msgX, msgY;
-	// BufferedImage picture = new BufferedImage();
+	BufferedImage picture;
 	
 	public PicturePanel() {
 		msgX = 0;
@@ -25,6 +24,7 @@ public class PicturePanel extends JPanel implements MouseListener, MouseMotionLi
 	}
 	
 	public void setPicture(BufferedImage pic) {
+		picture = pic;
 		repaint();
 	}
 	
@@ -33,7 +33,7 @@ public class PicturePanel extends JPanel implements MouseListener, MouseMotionLi
 		g.drawString(coords, msgX, msgY);
 		
 		try {
-			// g.drawImage(picture, 0, 0, 300, 400, null);
+			g.drawImage(picture, 0, 0, 300, 400, null);
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Failed to load image");
 		}

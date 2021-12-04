@@ -4,7 +4,7 @@ import java.io.File;
 
 public class PictureDataReader {
 	
-	public ArrayList<PictureData> readPictureDataFromFile(String fname) {
+	public static ArrayList<PictureData> readPictureDataFromFile(String fname) {
 		try {
 		Scanner fsc = new Scanner(new File(fname));
 		ArrayList<PictureData> pictures = new ArrayList<PictureData>();
