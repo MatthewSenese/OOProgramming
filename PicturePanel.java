@@ -8,11 +8,21 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 
 public class PicturePanel extends JPanel implements MouseListener, MouseMotionListener {
 	private String coords;
 	private int msgX, msgY;
 	BufferedImage picture;
+	ArrayList<PictureData> pictures;
+	
+	public ArrayList<PictureData> getPictureData() {
+		return pictures;
+	}
+	
+	public void setPictureData(ArrayList<PictureData> pics) {
+		pictures = pics;
+	}
 	
 	public PicturePanel() {
 		msgX = 0;

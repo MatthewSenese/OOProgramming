@@ -11,11 +11,33 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
+import java.util.ArrayList;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+// Ask about picture dimensions bc confusing
+// Ask about what it wants to save, and how to show text automatically in JTextField
 
 // This is the base for the picture frame
 public class PictureFrame extends JFrame {
+	
+	private ArrayList<PictureData> picDescriptions;
+	private ArrayList<BufferedImage> images;
+	private PicturePanel panNorth;
+	private int picTracker;
+	private JTextField panCNorth;
+	private JTextArea panCCenter;
+	
+	public void savePicture() {
+		ArrayList<PictureData> pictures = panNorth.getPictureData();
+		/*
+		JFileChooser jfc = new JFileChooser();
+		PictureDataWriter.writePictureDataToFile(jfc.getDescription(new File("descriptions.txt")), pictures);
+		*/
+	}
 	
 	public void setupMenu() {
 		JMenuBar mbar = new JMenuBar();
@@ -25,6 +47,19 @@ public class PictureFrame extends JFrame {
 		mbar.add(mnuHelp);
 		JMenuItem miSave = new JMenuItem("Save");
 		mnuFile.add(miSave);
+		miSave.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						/*
+						ArrayList<PictureData> pictures = panNorth.getPictureData();
+						JFileChooser jfc = new JFileChooser();
+						if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+							PictureDataWriter.writePictureDataToFile(jfc.getSelectedFile().getName(), pictures);
+						}
+						*/
+						savePicture();
+					}
+				});
 		JMenuItem miExit = new JMenuItem("Exit");
 		mnuFile.add(miExit);
 		miExit.addActionListener(
@@ -50,28 +85,63 @@ public class PictureFrame extends JFrame {
 		setBounds(100,100,290,400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setupMenu();
+		picDescriptions = PictureDataReader.readPictureDataFromFile("descriptions.txt");
+		images = PictureLoader.loadImagesFromPictureData(picDescriptions);
 		Container c = getContentPane();
 		c.setLayout(new BorderLayout());
 		JPanel panCenter = new JPanel();
 		panCenter.setLayout(new BorderLayout());
-		JTextField panCNorth = new JTextField();
+		panCNorth = new JTextField(20);
 		panCenter.add(panCNorth, BorderLayout.NORTH);
-		JTextArea panCCenter = new JTextArea();
+		panCNorth.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				picDescriptions.get(0).getDate();
+			}
+		});
+		panCCenter = new JTextArea();
 		panCenter.add(panCCenter, BorderLayout.CENTER);
+		panCCenter.setText(picDescriptions.get(0).getDescription());
 		JPanel panCSouth = new JPanel();
 		panCSouth.setLayout(new FlowLayout());
 		JButton btnNext = new JButton("Next");
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				picTracker ++;
+				if (picTracker > 3) {
+					picTracker = 0;
+				}
+				panNorth.setPicture(images.get(picTracker));
+				panCCenter.setText(picDescriptions.get(picTracker).getDescription());
+				panCNorth.setText(picDescriptions.get(picTracker).getDate());
+			}
+		});
 		JButton btnPrev = new JButton("Prev");
+		btnPrev.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				picTracker --;
+				if (picTracker < 0) {
+					picTracker = 3;
+				}
+				panNorth.setPicture(images.get(picTracker));
+				panCCenter.setText(picDescriptions.get(picTracker).getDescription());
+				panCNorth.setText(picDescriptions.get(picTracker).getDate());
+			}
+		});
 		JButton btnSave = new JButton("Save");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				savePicture();
+			}
+		});
+		panCSouth.add(btnNext);
 		panCSouth.add(btnPrev);
 		panCSouth.add(btnSave);
-		panCSouth.add(btnNext);
 		panCenter.add(panCSouth, BorderLayout.SOUTH);
 		c.add(panCenter, BorderLayout.CENTER);
-		PicturePanel panNorth = new PicturePanel();
-		// panNorth.setPreferredSize(new Dimension(290, 290));
+		panNorth = new PicturePanel();
 		c.add(panNorth, BorderLayout.NORTH);
-
+		picTracker = 0;
+		panNorth.setPicture(images.get(picTracker));
 	}
 	
 	public PictureFrame() {
